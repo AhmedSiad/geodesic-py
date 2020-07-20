@@ -8,16 +8,32 @@ def graphSize(n):
         print('   Your board of base ' + str(n) + " has " + str(spaces) + " spaces")
 
 
-# game interface
+# node class
+
+class Node:
+    def __init__(self, key):
+        self.id = key
+        self.color = "empty"
+        # self.neighbors = graph[key]
+
+
+# startup
 
 bList = []
 wList = []
 
 print('Welcome to Command Line Y!')
-print('by Will Zahary Henderson')
 n = int(input('Please enter the base size of the board: '))
 graphSize(n)
 spaces = int((n ** 2 - n) * (3 / 2))
+
+
+# node creation
+
+nodeList = [Node(i) for i in range(0, spaces)]
+
+# gameplay
+
 currentMove = "black"
 while True:
     if currentMove == "black":
@@ -32,6 +48,7 @@ while True:
             bList.append(bMove)
             print('   Black = ' + str(bList))
             print('   White = ' + str(wList))
+            nodeList[bMove].color = "black"
             currentMove = "white"
     
     if currentMove == "white":
@@ -46,4 +63,5 @@ while True:
             wList.append(wMove)
             print('   Black = ' + str(bList))
             print('   White = ' + str(wList))
+            nodeList[wMove].color = "white"
             currentMove = "black"
