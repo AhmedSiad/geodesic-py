@@ -8,6 +8,7 @@ def graphSize(n):
     else:
         spaces = int((n ** 2 - n) * (3 / 2))
         print('   Your board of base ' + str(n) + " has " + str(spaces) + " spaces")
+        global g
         g = grph.generateNSizedGraph(n)
 
 
@@ -32,7 +33,7 @@ spaces = int((n ** 2 - n) * (3 / 2))
 
 # node creation
 
-nodeList = [Node(i) for i in range(0, spaces)]
+nodeList = [Node(i, g) for i in range(0, spaces)]
 
 # gameplay
 
