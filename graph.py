@@ -1,3 +1,5 @@
+# Graph File
+
 def generateNSizedGraph(n):
     if n <= 2:
         # do something special for board sizes 2 and 1
@@ -15,7 +17,7 @@ def generateNSizedGraph(n):
         smallest = getSmallestCellNumber(depth)
         biggest = getSmallestCellNumber(depth + 1)
         for i in range(smallest, biggest):
-            #Neighbors within depth level
+            # Neighbors within depth level
             if i != biggest - 1:
                 graph[i].append(i + 1)
             else:
@@ -26,21 +28,21 @@ def generateNSizedGraph(n):
             else:
                 graph[i].append(biggest - 1)
 
-            #Neighbors between current depth level and the depth level above
-            #Ignore depth level when it is equal to the max size of the board, because it has no depth level above it
+            # Neighbors between current depth level and the depth level above
+            # Ignore depth level when it is equal to the max size of the board, because it has no depth level above it
             if isCorner(i, depth) and depth != n:
-                #Corner pieces always have 3 neighbors above them
+                # Corner pieces always have 3 neighbors above them
                 cornerNum = getCornerPlace(i, depth)
                 nextCornerUp = getCorner(cornerNum, depth + 1)
                 graph[i].append(nextCornerUp)
-                graph[i].append(nextCornerUp + 1) 
+                graph[i].append(nextCornerUp + 1)
                 if nextCornerUp == biggest:
-                    #This is the center corner 
+                    # This is the center corner
                     graph[i].append(getSmallestCellNumber(depth + 2) - 1)
                 else:
                     graph[i].append(nextCornerUp - 1)
             elif depth != n:
-                #Regular edge pieces
+                # Regular edge pieces
                 c = getCornerPlace(lastCorner(i, depth), depth)
                 multiple = (depth - 1) * 3
                 graph[i].append(i + multiple + c)
@@ -48,17 +50,19 @@ def generateNSizedGraph(n):
 
         depth += 1
 
-    #Add 3 outer edge nodes
+    # Add 3 outer edge nodes
     for i in range(3):
         corner = getCorner(i, n)
         graph.append([x for x in range(corner, corner + n)])
-        if i == 2: 
-            #Remove extra last edge, and add the correct corner from the level below
+        if i == 2:
+            # Remove extra last edge, and add the correct corner from the level below
             del graph[-1][-1]
             graph[-1].append(getCorner(0, n))
 
-    graph = pairUpGraph(graph) #Pair up any remaining cells where only 1 of them is counted as a neighbor
+    # Pair up any remaining cells where only 1 of them is counted as a neighbor
+    graph = pairUpGraph(graph)
     return graph
+
 
 def pairUpGraph(graph):
     g = graph[:]
@@ -69,6 +73,7 @@ def pairUpGraph(graph):
                 g[res].append(i)
         g[i].sort()
     return g
+
 
 def getSmallestCellNumber(n):
     return int(3 * (n - 1) * (n - 2)/2)
@@ -94,15 +99,33 @@ def getCornerPlace(x, depth):
     if x == smallestCell + depth * 2 - 2:
         return 2
 
+
 def getCorner(num, depth):
     smallestCell = getSmallestCellNumber(depth)
     return smallestCell + (depth - 1) * num
+
 
 def lastCorner(x, depth):
     first = getCorner(0, depth)
     second = getCorner(1, depth)
     third = getCorner(2, depth)
-    if x < second: return first
-    if x < third: return second
+    if x < second:
+        return first
+    if x < third:
+        return second
     return third
 
+
+def getEdge(x, depth):
+    first = getCorner(0, depth)
+    second = getCorner(1, depth)
+    third = getCorner(2, depth)
+
+    edge = 0b0
+    if x >= first and x <= second:
+        edge |= 0b01
+    if x >= second and x <= third:
+        edge |= 0b10
+    if x >= third or x == first:
+        edge |= 0b100
+    return edge

@@ -1,5 +1,6 @@
 import graph as grph
 import node as nde
+import game as gm
 
 # finding graph size
 
@@ -24,39 +25,8 @@ spaces = int((n ** 2 - n) * (3 / 2))
 
 
 # node creation
+game = gm.Game(g)
+game.run()
 
-nodeList = [nde.Node(i, g) for i in range(0, spaces)]
 
 # gameplay
-
-currentMove = "black"
-while True:
-    if currentMove == "black":
-        bMove = int(input('Please enter a black move: '))
-        if bList.count(bMove) > 0 or wList.count(bMove) > 0:
-            print("   Error: this space is already taken")
-            currentMove = "black"
-        elif bMove >= spaces or bMove < 0:
-            print("   Error: this space does not exist on this board")
-            currentMove = "black"
-        else:
-            bList.append(bMove)
-            print('   Black = ' + str(bList))
-            print('   White = ' + str(wList))
-            nodeList[bMove].color = "black"
-            currentMove = "white"
-    
-    if currentMove == "white":
-        wMove = int(input('Please enter a white move: '))
-        if bList.count(wMove) > 0 or wList.count(wMove) > 0:
-            print("   Error: this space is already taken")
-            currentMove = "white"
-        elif wMove >= spaces or wMove < 0:
-            print("   Error: this space does not exist on this board")
-            currentMove = "white"
-        else:
-            wList.append(wMove)
-            print('   Black = ' + str(bList))
-            print('   White = ' + str(wList))
-            nodeList[wMove].color = "white"
-            currentMove = "black"
