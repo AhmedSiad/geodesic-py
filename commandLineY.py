@@ -1,4 +1,4 @@
-import graph
+import graph as grph
 
 # finding graph size
 
@@ -8,16 +8,16 @@ def graphSize(n):
     else:
         spaces = int((n ** 2 - n) * (3 / 2))
         print('   Your board of base ' + str(n) + " has " + str(spaces) + " spaces")
+        g = graph.generateNSizedGraph(n)
 
 
 # node class
 
 class Node:
-    def __init__(self, key):
+    def __init__(self, key, graph):
         self.id = key
         self.color = "empty"
         self.neighbors = graph[key]
-
 
 # startup
 
