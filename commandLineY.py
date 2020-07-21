@@ -8,7 +8,7 @@ def graphSize(n):
     else:
         spaces = int((n ** 2 - n) * (3 / 2))
         print('   Your board of base ' + str(n) + " has " + str(spaces) + " spaces")
-        g = graph.generateNSizedGraph(n)
+        g = grph.generateNSizedGraph(n)
 
 
 # node class
