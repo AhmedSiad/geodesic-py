@@ -1,3 +1,5 @@
+import graph
+
 # finding graph size
 
 def graphSize(n):
@@ -14,7 +16,7 @@ class Node:
     def __init__(self, key):
         self.id = key
         self.color = "empty"
-        # self.neighbors = graph[key]
+        self.neighbors = graph[key]
 
 
 # startup
