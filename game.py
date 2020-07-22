@@ -75,13 +75,16 @@ class Game:
             if nb.color != newStone.color:
                 continue
 
+            nbRoot = self.findRoot(nb)
             nb.parent = newStone.id  # Set parent of neighbor to new stone
-            newStone.edges |= nb.edges  # Bitwise OR to update edges
+            nbRoot.parent = newStone.id
+            newStone.edges |= nbRoot.edges  # Bitwise OR to update edges
 
             indexNb = self.findIndexOfNode(nb)
             indexS = self.findIndexOfNode(newStone)
             if indexNb != -1 and indexS != indexNb:
                 # Merge two sets if they are neighbors
+                for e in self.groupings[indexNb]: e.parent = newStone.id # Compress all remaining nodes
                 self.groupings[-1] += self.groupings[indexNb]
                 del self.groupings[indexNb]  # Get rid of old set
 
@@ -93,6 +96,11 @@ class Game:
             if current.edges == 0b111:  # Win condition
                 return current.color
         return "none"
+
+    def findRoot(self, node):
+        if node.parent != node.id:
+            node.parent = self.findRoot(self.nodes[node.parent]).id
+        return self.nodes[node.parent]
 
     def findIndexOfNode(self, node):  # Find which group a node resides in
         for i in range(len(self.groupings)):
