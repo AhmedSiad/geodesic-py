@@ -1,7 +1,7 @@
 # Game File
 
 import node
-
+import network
 
 class Game:
     def __init__(self, graph):
@@ -13,9 +13,12 @@ class Game:
         self.bMoves = []
         self.wMoves = []
 
+        self.network = network.Network(self.graph)
+
     def run(self):
         currentMove = "black"
         while True:
+            self.network.draw(self.nodes)
             winner = self.findWinner()
             if winner != "none":
                 print(winner + " has won the game!")
