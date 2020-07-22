@@ -36,6 +36,7 @@ class Game:
                         print('   White = ' + str(self.wMoves))
                         self.nodes[bMove].color = "black"
                         currentMove = "white"
+                        continue
                 except ValueError:
                     print("   Error: please input an integer")
                     currentMove = "black"
