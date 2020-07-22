@@ -27,7 +27,7 @@ class Game:
                     if self.bMoves.count(bMove) > 0 or self.wMoves.count(bMove) > 0:
                         print("   Error: this space is already taken")
                         currentMove = "black"
-                    elif bMove >= len(self.nodes):
+                    elif bMove >= len(self.nodes) or bMove < 0:
                         print("   Error: this space does not exist on this board")
                         currentMove = "black"
                     else:
@@ -46,7 +46,7 @@ class Game:
                     if self.bMoves.count(wMove) > 0 or self.wMoves.count(wMove) > 0:
                         print("   Error: this space is already taken")
                         currentMove = "white"
-                    elif wMove >= len(self.nodes):
+                    elif wMove >= len(self.nodes) or wMove < 0:
                         print("   Error: this space does not exist on this board")
                         currentMove = "white"
                     else:
