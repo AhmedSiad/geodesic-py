@@ -50,15 +50,6 @@ def generateNSizedGraph(n):
 
         depth += 1
 
-    # Add 3 outer edge nodes
-    for i in range(3):
-        corner = getCorner(i, n)
-        graph.append([x for x in range(corner, corner + n)])
-        if i == 2:
-            # Remove extra last edge, and add the correct corner from the level below
-            del graph[-1][-1]
-            graph[-1].append(getCorner(0, n))
-
     # Pair up any remaining cells where only 1 of them is counted as a neighbor
     graph = pairUpGraph(graph)
     return graph
