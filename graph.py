@@ -1,6 +1,9 @@
 # Graph File
 
 def generateNSizedGraph(n):
+
+    # n == 2 game is possible
+
     if n <= 2:
         # do something special for board sizes 2 and 1
         pass
@@ -10,6 +13,9 @@ def generateNSizedGraph(n):
     graph[0] = [1, 2, 3, 4, 8]
     graph[1] = [0, 2, 4, 5, 6]
     graph[2] = [0, 1, 6, 7, 8]
+
+    # consider simplifying graph generation
+    # for i in range ...
 
     # Start at depth level 3 because depth level 1 and 2 are trivial
     depth = 3
@@ -60,25 +66,20 @@ def pairUpGraph(graph):
     for i in range(len(g)):
         for j in range(len(g[i])):
             res = g[i][j]
-            if not i in g[res]:
+            if i not in g[res]:
                 g[res].append(i)
         g[i].sort()
     return g
 
 
 def getSmallestCellNumber(n):
-    return int(3 * (n - 1) * (n - 2)/2)
+    return 3 * (n ** 2 - n) // 2
 
 
 def isCorner(x, depth):
     smallestCell = getSmallestCellNumber(depth)
-    if x == smallestCell:
-        return True
-    if x == smallestCell + depth - 1:
-        return True
-    if x == smallestCell + depth * 2 - 2:
-        return True
-    return False
+    tup = (smallestCell, smallestCell + depth - 1, smallestCell + depth * 2 - 2)
+    return x in tup
 
 
 def getCornerPlace(x, depth):
@@ -113,9 +114,9 @@ def getEdge(x, depth):
     third = getCorner(2, depth)
 
     edge = 0b0
-    if x >= first and x <= second:
+    if first <= x <= second:
         edge |= 0b01
-    if x >= second and x <= third:
+    if second <= x <= third:
         edge |= 0b10
     if x >= third or x == first:
         edge |= 0b100

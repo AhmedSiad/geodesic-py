@@ -9,5 +9,5 @@ class Node:
         self.neighbors = graph[key]
         self.parent = self.id
 
-        N = int((1/6) * (math.sqrt(24 * len(graph) + 9) + 3)) # Find N value
+        N = int((1/6) * (math.sqrt(24 * len(graph) + 9) + 3)) # Find N value, base size
         self.edges = getEdge(self.id, N)

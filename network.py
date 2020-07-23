@@ -15,6 +15,7 @@ class Network:
 
         # Add nodes, edges, and labels
         self.netw.add_nodes_from([i for i in range(len(g))])
+        # self.netw.add_nodes_from(range(len(g))) should work
         for i in range(len(g)):
             for j in g[i]:
                 self.netw.add_edge(i, j)
@@ -54,7 +55,7 @@ class Network:
                 color = gameNodes[i[0]].color if gameNodes[i[0]].color != "white" else "grey"
                 wid = 3.0
                 alph = 1.0
-            nx.draw_networkx_edges(self.netw, self.pos, edgelist=[i], width=wid, edge_color=color)
+            nx.draw_networkx_edges(self.netw, self.pos, edgelist=[i], width=wid, edge_color=color, alpha=alph)
         plt.pause(0.1)
         plt.draw()
 
@@ -66,9 +67,12 @@ class Network:
         next = graph.getCorner(0, N + 1)
 
         values = {}
-        for i in range(first + 1, second): values[i] = "red"
-        for i in range(second + 1, third): values[i] = "green"
-        for i in range(third + 1, next): values[i] = "blue"
+        for i in range(first + 1, second): 
+            values[i] = "red"
+        for i in range(second + 1, third): 
+            values[i] = "green"
+        for i in range(third + 1, next): 
+            values[i] = "blue"
 
         values[first] = "gold"
         values[second] = "gold"

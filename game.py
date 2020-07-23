@@ -27,7 +27,7 @@ class Game:
             if currentMove == "black":
                 try:
                     bMove = int(input('Please enter a black move: '))
-                    if self.bMoves.count(bMove) > 0 or self.wMoves.count(bMove) > 0:
+                    if self.nodes[bMove].color != "empty":
                         print("   Error: this space is already taken")
                         currentMove = "black"
                     elif bMove >= len(self.nodes) or bMove < 0:
@@ -47,7 +47,7 @@ class Game:
             if currentMove == "white":
                 try:
                     wMove = int(input('Please enter a white move: '))
-                    if self.bMoves.count(wMove) > 0 or self.wMoves.count(wMove) > 0:
+                    if self.nodes[wMove].color != "empty":
                         print("   Error: this space is already taken")
                         currentMove = "white"
                     elif wMove >= len(self.nodes) or wMove < 0:
@@ -84,6 +84,8 @@ class Game:
             nbRoot.parent = newStone.id
             newStone.edges |= nbRoot.edges  # Bitwise OR to update edges
 
+            # may not be necessary:
+            
             indexNb = self.findIndexOfNode(nb)
             indexS = self.findIndexOfNode(newStone)
             if indexNb != -1 and indexS != indexNb:
@@ -93,6 +95,10 @@ class Game:
                 del self.groupings[indexNb]  # Get rid of old set
 
     def findWinner(self):
+        # whenever someone plays a new stone
+        # either that stone won the game, or it didn't
+        # if they won the game, then the group of the new stone will touch all three sides
+        # to check who won, just check if the group of the new stone touches all three sides
         for group in self.groupings:
             current = group[0]
             while current.parent != current.id:

@@ -8,20 +8,21 @@ def graphSize(n):
     if n < 2:
         print('   Error: base must be an integer greater than 1')
     else:
-        spaces = int((n ** 2 - n) * (3 / 2))
+        spaces = 3 * (n ** 2 - n) // 2
         print('   Your board of base ' + str(n) + " has " + str(spaces) + " spaces")
-        global g
-        g = grph.generateNSizedGraph(n)
+        return grph.generateNSizedGraph(n)
 
 # startup
 
-bList = []
-wList = []
-
 print('Welcome to Command Line Y!')
-n = int(input('Please enter the base size of the board: '))
-graphSize(n)
-spaces = int((n ** 2 - n) * (3 / 2))
+while True:
+    try:
+        n = int(input('Please enter the base size of the board: '))
+        break
+    except:
+        print('   Error: base must be an integer greater than 1')
+        continue
+g = graphSize(n)
 
 
 # node creation
