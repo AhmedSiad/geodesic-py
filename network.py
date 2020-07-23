@@ -14,8 +14,7 @@ class Network:
         self.graph = g
 
         # Add nodes, edges, and labels
-        self.netw.add_nodes_from([i for i in range(len(g))])
-        # self.netw.add_nodes_from(range(len(g))) should work
+        self.netw.add_nodes_from(range(len(g)))
         for i in range(len(g)):
             for j in g[i]:
                 self.netw.add_edge(i, j)
@@ -39,12 +38,15 @@ class Network:
         for i in self.netw.nodes:
             color = gameNodes[i].color if gameNodes[i].color != "empty" else "grey"
             if i in self.values.keys():
-                if gameNodes[i].color != "empty": self.values[i] = gameNodes[i].color
+                if gameNodes[i].color != "empty":
+                    self.values[i] = gameNodes[i].color
                 color = self.values[i]
-            nx.draw_networkx_nodes(self.netw, self.pos, nodelist=[i], node_color=color)
+            nds = nx.draw_networkx_nodes(self.netw, self.pos, nodelist=[i], node_color=color)
+            nds.set_edgecolor("black")
 
             fontC = "black"
-            if gameNodes[i].color == "black": fontC = "white"
+            if gameNodes[i].color == "black":
+                fontC = "white"
             nx.draw_networkx_labels(self.netw, self.pos, {i: i}, font_color=fontC)
 
         for i in self.netw.edges:
@@ -67,11 +69,11 @@ class Network:
         next = graph.getCorner(0, N + 1)
 
         values = {}
-        for i in range(first + 1, second): 
+        for i in range(first + 1, second):
             values[i] = "red"
-        for i in range(second + 1, third): 
+        for i in range(second + 1, third):
             values[i] = "green"
-        for i in range(third + 1, next): 
+        for i in range(third + 1, next):
             values[i] = "blue"
 
         values[first] = "gold"

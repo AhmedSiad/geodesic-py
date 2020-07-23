@@ -19,10 +19,6 @@ class Game:
         currentMove = "black"
         while True:
             self.network.draw(self.nodes)
-            winner = self.findWinner()
-            if winner != "none":
-                print(winner + " has won the game!")
-                break
 
             if currentMove == "black":
                 try:
@@ -39,6 +35,10 @@ class Game:
                         print('   White = ' + str(self.wMoves))
                         self.nodes[bMove].color = "black"
                         currentMove = "white"
+                        winner = self.findWinner(bMove)
+                        if winner != "none":
+                            print(winner.capitalize() + " has won the game!")
+                            break
                         continue
                 except ValueError:
                     print("   Error: please input an integer")
@@ -59,13 +59,20 @@ class Game:
                         print('   White = ' + str(self.wMoves))
                         self.nodes[wMove].color = "white"
                         currentMove = "black"
+                        winner = self.findWinner(wMove)
+                        if winner != "none":
+                            print(winner.capitalize() + " has won the game!")
+                            break
                 except ValueError:
                     print("   Error: please input an integer")
                     currentMove = "white"
+        # Finish Game
+        self.network.draw(self.nodes)
+        input("Press any key to close application")
 
     def processMove(self, location, player):
         newStone = self.nodes[location]
-        self.groupings.append([newStone])  # Creates new set
+        #self.groupings.append([newStone])  # Creates new set
 
         if player == "black":
             self.bMoves.append(location)
@@ -84,27 +91,14 @@ class Game:
             nbRoot.parent = newStone.id
             newStone.edges |= nbRoot.edges  # Bitwise OR to update edges
 
-            # may not be necessary:
-            
-            indexNb = self.findIndexOfNode(nb)
-            indexS = self.findIndexOfNode(newStone)
-            if indexNb != -1 and indexS != indexNb:
-                # Merge two sets if they are neighbors
-                for e in self.groupings[indexNb]: e.parent = newStone.id # Compress all remaining nodes
-                self.groupings[-1] += self.groupings[indexNb]
-                del self.groupings[indexNb]  # Get rid of old set
 
-    def findWinner(self):
+    def findWinner(self, location):
         # whenever someone plays a new stone
         # either that stone won the game, or it didn't
         # if they won the game, then the group of the new stone will touch all three sides
         # to check who won, just check if the group of the new stone touches all three sides
-        for group in self.groupings:
-            current = group[0]
-            while current.parent != current.id:
-                current = self.nodes[current.parent]  # Find the top parent
-            if current.edges == 0b111:  # Win condition
-                return current.color
+        if self.nodes[location].edges == 0b111:
+            return self.nodes[location].color
         return "none"
 
     def findRoot(self, node):

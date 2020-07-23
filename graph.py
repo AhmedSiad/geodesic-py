@@ -1,12 +1,12 @@
 # Graph File
 
 def generateNSizedGraph(n):
-
-    # n == 2 game is possible
-
     if n <= 2:
-        # do something special for board sizes 2 and 1
-        pass
+        graph = []
+        graph[0] = [1, 2]
+        graph[1] = [0, 2]
+        graph[2] = [0, 1]
+        return graph
 
     graph = [[] for i in range(getSmallestCellNumber(n + 1))]
 
@@ -73,7 +73,7 @@ def pairUpGraph(graph):
 
 
 def getSmallestCellNumber(n):
-    return 3 * (n ** 2 - n) // 2
+    return 3 * (n - 1) * (n - 2) // 2
 
 
 def isCorner(x, depth):
