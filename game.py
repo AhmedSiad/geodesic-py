@@ -12,60 +12,36 @@ class Game:
 
         self.bMoves = []
         self.wMoves = []
+        self.legalMoves = [i for i in range(len(self.graph))]
+
+        self.bAgent = None
+        self.wAgent = None
 
         self.network = network.Network(self.graph)
 
-    def run(self):
+    def run(self, ptb, ptw):
         currentMove = "black"
+
+        if ptb == "human":
+            self.bAgent = Agent("black", "human")
+        else:
+            self.bAgent = Agent("black", "random")
+        if ptw == "human":
+            self.wAgent = Agent("white", "human")
+        else:
+            self.wAgent = Agent("white", "random")
+
+
         while True:
             self.network.draw(self.nodes)
 
             if currentMove == "black":
-                try:
-                    bMove = int(input('Please enter a black move: '))
-                    if self.nodes[bMove].color != "empty":
-                        print("   Error: this space is already taken")
-                        currentMove = "black"
-                    elif bMove >= len(self.nodes) or bMove < 0:
-                        print("   Error: this space does not exist on this board")
-                        currentMove = "black"
-                    else:
-                        self.processMove(bMove, "black")
-                        print('   Black = ' + str(self.bMoves))
-                        print('   White = ' + str(self.wMoves))
-                        self.nodes[bMove].color = "black"
-                        currentMove = "white"
-                        winner = self.findWinner(bMove)
-                        if winner != "none":
-                            print(winner.capitalize() + " has won the game!")
-                            break
-                        continue
-                except ValueError:
-                    print("   Error: please input an integer")
-                    currentMove = "black"
+                decision = self.bAgent.decisionFunction(self)
+                self.processMove(decision, "black")
+            else:
+                decision = self.wAgent.decisionFunction(self)
+                self.processMove(decision, "white")
 
-            if currentMove == "white":
-                try:
-                    wMove = int(input('Please enter a white move: '))
-                    if self.nodes[wMove].color != "empty":
-                        print("   Error: this space is already taken")
-                        currentMove = "white"
-                    elif wMove >= len(self.nodes) or wMove < 0:
-                        print("   Error: this space does not exist on this board")
-                        currentMove = "white"
-                    else:
-                        self.processMove(wMove, "white")
-                        print('   Black = ' + str(self.bMoves))
-                        print('   White = ' + str(self.wMoves))
-                        self.nodes[wMove].color = "white"
-                        currentMove = "black"
-                        winner = self.findWinner(wMove)
-                        if winner != "none":
-                            print(winner.capitalize() + " has won the game!")
-                            break
-                except ValueError:
-                    print("   Error: please input an integer")
-                    currentMove = "white"
         # Finish Game
         self.network.draw(self.nodes)
         input("Press any key to close application")
@@ -80,6 +56,8 @@ class Game:
         else:
             self.wMoves.append(location)
             newStone.color = "white"
+
+        self.legalMoves.remove(location)
 
         for i in newStone.neighbors:
             nb = self.nodes[i]
