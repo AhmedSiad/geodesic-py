@@ -7,7 +7,7 @@ class Agent:
     def __init__(self, color, type):
         self.color = color
         self.type = type
-        self.counter = 0
+
         self.decisionFunction = None
         if self.type == "random":
             self.decisionFunction = self.minimax
@@ -15,6 +15,8 @@ class Agent:
             self.decisionFunction = None # for now
         elif self.type == "human":
             self.decisionFunction = self.human
+
+        self.maxDepth = 2
 
     def random(self, gameState):
         # Pick random move
@@ -40,10 +42,9 @@ class Agent:
                 continue
 
     def minimax(self, gameState):
-        bestMove = self.negamax(gameState, 9, self.color, None)
+        bestMove = self.negamax(gameState, self.maxDepth, self.color, None)
         return bestMove
     def negamax(self, gameState, depth, color, move):
-        self.counter += 1
         if move != None:
             initialVal = self.evaluateGameState(gameState, color, move)
             if math.isinf(initialVal) or depth == 0:
@@ -60,15 +61,19 @@ class Agent:
             childVal = -oppositeVal
             bestMove = i if childVal > value else bestMove
             value = max(value, childVal)
-        if depth == 9:
+        if depth == self.maxDepth:
             return bestMove
         return value
 
     def evaluateGameState(self, gameState, color, move):
-        if self.counter % 5000 == 0: print(self.counter)
         winner = gameState.findWinner(move)
         if winner == color:
             return math.inf
         elif winner == "none":
-            return 0
+            score = 0
+            for i in gameState.nodes:
+                if i.color == color and i.parent == i.id:
+                    children = filter(lambda x: x.parent == i.id, gameState.nodes)
+                    score += len(list(children))
+            return score
         return -math.inf
