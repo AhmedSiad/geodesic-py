@@ -11,12 +11,14 @@ class Agent:
             self.decisionFunction = self.random
         elif self.type == "negamax":
             self.decisionFunction = None # for now
-
+        elif self.type == "human":
+            self.decisionFunction = self.human
 
     def random(self, gameState):
         # Pick random move
         pick = random.randint(0, len(gameState.legalMoves) - 1)
-        return gameState.nodes[pick]
+        pick = gameState.legalMoves[pick]
+        return gameState.nodes[pick].id
 
     def human(self, gameState):
         # Controlled by human

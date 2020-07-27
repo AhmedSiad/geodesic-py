@@ -2,6 +2,7 @@
 
 import node
 import network
+import agent
 
 class Game:
     def __init__(self, graph):
@@ -23,24 +24,30 @@ class Game:
         currentMove = "black"
 
         if ptb == "human":
-            self.bAgent = Agent("black", "human")
+            self.bAgent = agent.Agent("black", "human")
         else:
-            self.bAgent = Agent("black", "random")
+            self.bAgent = agent.Agent("black", "random")
         if ptw == "human":
-            self.wAgent = Agent("white", "human")
+            self.wAgent = agent.Agent("white", "human")
         else:
-            self.wAgent = Agent("white", "random")
-
+            self.wAgent = agent.Agent("white", "random")
 
         while True:
             self.network.draw(self.nodes)
 
+            decision = ""
             if currentMove == "black":
                 decision = self.bAgent.decisionFunction(self)
                 self.processMove(decision, "black")
             else:
                 decision = self.wAgent.decisionFunction(self)
                 self.processMove(decision, "white")
+
+            winner = self.findWinner(decision)
+            if winner != "none":
+                print(winner + " has won the game!")
+                break
+            currentMove = "white" if currentMove == "black" else "black"
 
         # Finish Game
         self.network.draw(self.nodes)
