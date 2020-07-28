@@ -16,7 +16,7 @@ class Agent:
         elif self.type == "human":
             self.decisionFunction = self.human
 
-        self.maxDepth = 2
+        self.maxDepth = 6
 
     def random(self, gameState):
         # Pick random move
@@ -42,9 +42,9 @@ class Agent:
                 continue
 
     def minimax(self, gameState):
-        bestMove = self.negamax(gameState, self.maxDepth, self.color, None)
+        bestMove = self.negamax(gameState, self.maxDepth, -math.inf, math.inf, self.color, None)
         return bestMove
-    def negamax(self, gameState, depth, color, move):
+    def negamax(self, gameState, depth, alpha, beta, color, move):
         if move != None:
             initialVal = self.evaluateGameState(gameState, color, move)
             if math.isinf(initialVal) or depth == 0:
@@ -57,10 +57,13 @@ class Agent:
             currentGameState.processMove(i, color)
 
             oppositeColor = "white" if color == "black" else "black"
-            oppositeVal = self.negamax(currentGameState, depth - 1, oppositeColor, i)
+            oppositeVal = self.negamax(currentGameState, depth - 1, -beta, -alpha, oppositeColor, i)
             childVal = -oppositeVal
             bestMove = i if childVal > value else bestMove
             value = max(value, childVal)
+            alpha = max(alpha, value)
+            if alpha >= beta:
+                break
         if depth == self.maxDepth:
             return bestMove
         return value
@@ -74,6 +77,9 @@ class Agent:
             for i in gameState.nodes:
                 if i.color == color and i.parent == i.id:
                     children = filter(lambda x: x.parent == i.id, gameState.nodes)
-                    score += len(list(children))
+                    score += len(list(children)) - 1
+                if i.color != "empty" and i.parent == i.id:
+                    children = filter(lambda x: x.parent == i.id, gameState.nodes)
+                    #score -= len(list(children)) - 1 maybe not necessary?
             return score
         return -math.inf
