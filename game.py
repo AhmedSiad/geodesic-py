@@ -68,6 +68,7 @@ class Game:
 
         for i in newStone.neighbors:
             nb = self.nodes[i]
+            nb.updateCircuitNeighbors(newStone)
             if nb.color != newStone.color:
                 continue
 
@@ -75,7 +76,6 @@ class Game:
             nb.parent = newStone.id  # Set parent of neighbor to new stone
             nbRoot.parent = newStone.id
             newStone.edges |= nbRoot.edges  # Bitwise OR to update edges
-
 
     def findWinner(self, location):
         # whenever someone plays a new stone

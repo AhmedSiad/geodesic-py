@@ -16,7 +16,7 @@ class Agent:
         elif self.type == "human":
             self.decisionFunction = self.human
 
-        self.maxDepth = 6
+        self.maxDepth = 4
 
     def random(self, gameState):
         # Pick random move
@@ -75,11 +75,6 @@ class Agent:
         elif winner == "none":
             score = 0
             for i in gameState.nodes:
-                if i.color == color and i.parent == i.id:
-                    children = filter(lambda x: x.parent == i.id, gameState.nodes)
-                    score += len(list(children)) - 1
-                if i.color != "empty" and i.parent == i.id:
-                    children = filter(lambda x: x.parent == i.id, gameState.nodes)
-                    #score -= len(list(children)) - 1 maybe not necessary?
+                score += len(i.circuitNeighbors[color])
             return score
         return -math.inf
