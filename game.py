@@ -20,17 +20,19 @@ class Game:
 
         self.network = network.Network(self.graph)
 
-    def run(self, ptb, ptw):
+    def run(self, ptb, ptw, level):
         currentMove = "black"
 
         if ptb == "human":
             self.bAgent = agent.Agent("black", "human")
         else:
             self.bAgent = agent.Agent("black", "random")
+            self.bAgent.maxDepth = level + 1
         if ptw == "human":
             self.wAgent = agent.Agent("white", "human")
         else:
             self.wAgent = agent.Agent("white", "random")
+            self.wAgent.maxDepth = level + 1
 
         while True:
             self.network.draw(self.nodes)
@@ -45,7 +47,7 @@ class Game:
 
             winner = self.findWinner(decision)
             if winner != "none":
-                print(winner + " has won the game!")
+                print("   " + winner.capitalize() + " has won the game!")
                 break
             currentMove = "white" if currentMove == "black" else "black"
 
