@@ -10,9 +10,9 @@ class Agent:
 
         self.decisionFunction = None
         if self.type == "random":
-            self.decisionFunction = self.minimax
+            self.decisionFunction = self.random
         elif self.type == "negamax":
-            self.decisionFunction = None # for now
+            self.decisionFunction = self.minimax
         elif self.type == "human":
             self.decisionFunction = self.human
 

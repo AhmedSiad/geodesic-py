@@ -5,12 +5,9 @@ import game as gm
 # finding graph size
 
 def graphSize(n):
-    if n < 2:
-        print('   Error: base must be an integer greater than 1')
-    else:
-        spaces = 3 * (n ** 2 - n) // 2
-        print('   Your board of base ' + str(n) + " has " + str(spaces) + " spaces")
-        return grph.generateNSizedGraph(n)
+    spaces = 3 * (n ** 2 - n) // 2
+    print('   Your board of base ' + str(n) + " has " + str(spaces) + " spaces")
+    return grph.generateNSizedGraph(n)
 
 # human or AI
 
@@ -31,10 +28,12 @@ print('Welcome to Command Line Y!')
 while True:
     try:
         n = int(input('Please enter the base size of the board: '))
-        break
+        if n >= 2:
+            break
+        if n < 2:
+            print('   Error: base must be an integer greater than 1')
     except:
         print('   Error: base must be an integer greater than 1')
-        continue
 g = graphSize(n)
 
 
@@ -47,10 +46,8 @@ while True:
             break
         else:
             print('   Error: player type must be a string reading \"human\" or \"AI\"')
-            continue
     except:
         print('   Error: player type must be a string reading \"human\" or \"AI\"')
-        continue
 
 while True:
     try:
@@ -59,16 +56,55 @@ while True:
             break
         else:
             print('   Error: player type must be a string reading \"human\" or \"AI\"')
-            continue
     except:
         print('   Error: player type must be a string reading \"human\" or \"AI\"')
-        continue
 
 playertype(ptb, ptw)
 
-# level selecting
+# AI type selecting
 
 if ptb == "AI":
+    while True:
+        try:
+            bTypeInput = str(input('Please enter the type of AI for black — random or negamax (type \"help\" to learn more): '))
+            if bTypeInput == "random":
+                ptb = "random"
+                print("   Black is controlled by a random AI")
+                break
+            elif bTypeInput == "negamax":
+                ptb = "negamax"
+                print("   Black is controlled by a negamax AI")
+                break
+            elif bTypeInput == "help":
+                print("   The random AI makes its moves randomly. The negamax AI makes its moves based on what it evaluates as the best")
+            else:
+                print('   Error: AI type must be \"random\" or \"negamax\"')
+        except:
+            print('   Error: AI type must be a string reading \"random\" or \"negamax\"')
+
+if ptw == "AI":
+    while True:
+        try:
+            bTypeInput = str(input('Please enter the type of AI for white — random or negamax (type \"help\" to learn more): '))
+            if bTypeInput == "random":
+                ptw = "random"
+                print("   White is controlled by a random AI")
+                break
+            elif bTypeInput == "negamax":
+                ptw = "negamax"
+                print("   White is controlled by a negamax AI")
+                break
+            elif bTypeInput == "help":
+                print("   The random AI makes its moves randomly. The negamax AI makes its moves based on what it evaluates as the best")
+            else:
+                print('   Error: AI type must be \"random\" or \"negamax\"')
+        except:
+            print('   Error: AI type must be a string reading \"random\" or \"negamax\"')
+
+
+# level selecting for negamax
+
+if ptb == "negamax":
     while True:
         bLevelInput = input('Please enter the difficulty level, 1 to 5, for the black AI (type \"help\" to learn more): ')
         if bLevelInput.isdigit() and 1 <= int(bLevelInput) <= 5:
@@ -77,17 +113,14 @@ if ptb == "AI":
             break
         elif bLevelInput.isdigit() and ( int(bLevelInput) < 1 or int(bLevelInput) > 5 ):
             print('   Error: AI level must be an integer between 1 and 5')
-            continue
         elif bLevelInput == "help":
             print("   Levels 1 and 2 are easy, levels 3 and 4 are medium, and level 5 is hard. The higher the level, the longer the AI takes to make decisions")
-            continue
         else:
             print('   Error: AI level must be an integer between 1 and 5')
-            continue
 else:
     bLevel = 1   # placeholder level if human
 
-if ptw == "AI":
+if ptw == "negamax":
     while True:
         wLevelInput = input('Please enter the difficulty level, 1 to 5, for the white AI (type \"help\" to learn more): ')
         if wLevelInput.isdigit() and 1 <= int(wLevelInput) <= 5:
@@ -96,13 +129,10 @@ if ptw == "AI":
             break
         elif wLevelInput.isdigit() and ( int(wLevelInput) < 1 or int(wLevelInput) > 5 ):
             print('   Error: AI level must be an integer between 1 and 5')
-            continue
         elif wLevelInput == "help":
             print("   Levels 1 and 2 are easy, levels 3 and 4 are medium, and level 5 is hard. The higher the level, the longer the AI takes to make decisions")
-            continue
         else:
             print('   Error: AI level must be an integer between 1 and 5')
-            continue
 else:
     wLevel = 1   # placeholder level if human
 
