@@ -20,19 +20,19 @@ class Game:
 
         self.network = network.Network(self.graph)
 
-    def run(self, ptb, ptw, level):
+    def run(self, ptb, ptw, bLevel, wLevel):
         currentMove = "black"
 
         if ptb == "human":
             self.bAgent = agent.Agent("black", "human")
         else:
             self.bAgent = agent.Agent("black", "random")
-            self.bAgent.maxDepth = level + 1
+            self.bAgent.maxDepth = bLevel + 1
         if ptw == "human":
             self.wAgent = agent.Agent("white", "human")
         else:
             self.wAgent = agent.Agent("white", "random")
-            self.wAgent.maxDepth = level + 1
+            self.wAgent.maxDepth = wLevel + 1
 
         while True:
             self.network.draw(self.nodes)

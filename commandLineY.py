@@ -68,29 +68,49 @@ playertype(ptb, ptw)
 
 # level selecting
 
-if ptb == "AI" or ptw == "AI":
+if ptb == "AI":
     while True:
-        levelInput = input('Please enter the difficulty level, 1 to 5, for the AI (type \"help\" to learn more): ')
-        if levelInput.isdigit() and 1 <= int(levelInput) <= 5:
-            level = int(levelInput)
-            print("   The AI difficulty is set to level " + str(level))
+        bLevelInput = input('Please enter the difficulty level, 1 to 5, for the black AI (type \"help\" to learn more): ')
+        if bLevelInput.isdigit() and 1 <= int(bLevelInput) <= 5:
+            bLevel = int(bLevelInput)
+            print("   The AI difficulty for black is set to level " + str(bLevel))
             break
-        elif levelInput.isdigit() and ( int(levelInput) < 1 or int(levelInput) > 5 ):
+        elif bLevelInput.isdigit() and ( int(bLevelInput) < 1 or int(bLevelInput) > 5 ):
             print('   Error: AI level must be an integer between 1 and 5')
             continue
-        elif levelInput == "help":
+        elif bLevelInput == "help":
             print("   Levels 1 and 2 are easy, levels 3 and 4 are medium, and level 5 is hard. The higher the level, the longer the AI takes to make decisions")
             continue
         else:
             print('   Error: AI level must be an integer between 1 and 5')
             continue
 else:
-    level = 1   # placeholder level if both are human
+    bLevel = 1   # placeholder level if human
+
+if ptw == "AI":
+    while True:
+        wLevelInput = input('Please enter the difficulty level, 1 to 5, for the white AI (type \"help\" to learn more): ')
+        if wLevelInput.isdigit() and 1 <= int(wLevelInput) <= 5:
+            wLevel = int(wLevelInput)
+            print("   The AI difficulty for white is set to level " + str(wLevel))
+            break
+        elif wLevelInput.isdigit() and ( int(wLevelInput) < 1 or int(wLevelInput) > 5 ):
+            print('   Error: AI level must be an integer between 1 and 5')
+            continue
+        elif wLevelInput == "help":
+            print("   Levels 1 and 2 are easy, levels 3 and 4 are medium, and level 5 is hard. The higher the level, the longer the AI takes to make decisions")
+            continue
+        else:
+            print('   Error: AI level must be an integer between 1 and 5')
+            continue
+else:
+    wLevel = 1   # placeholder level if human
+
 
 
 # node creation
 game = gm.Game(g)
-game.run(ptb, ptw, level)
+game.run(ptb, ptw, bLevel, wLevel)
 
 
 # gameplay
