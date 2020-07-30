@@ -66,6 +66,8 @@ while True:
 
 playertype(ptb, ptw)
 
+# level selecting
+
 if ptb == "AI" or ptw == "AI":
     while True:
         levelInput = input('Please enter the difficulty level, 1 to 5, for the AI (type \"help\" to learn more): ')
@@ -82,6 +84,8 @@ if ptb == "AI" or ptw == "AI":
         else:
             print('   Error: AI level must be an integer between 1 and 5')
             continue
+else:
+    level = 1   # placeholder level if both are human
 
 
 # node creation
