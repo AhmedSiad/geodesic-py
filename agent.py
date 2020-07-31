@@ -11,11 +11,13 @@ class Agent:
 
         self.decisionFunction = None
         if self.type == "random":
-            self.decisionFunction = self.mcts
+            self.decisionFunction = self.random
         elif self.type == "negamax":
             self.decisionFunction = self.minimax
         elif self.type == "human":
             self.decisionFunction = self.human
+        elif self.type == "montecarlo":
+            self.decisionFunction = self.mcts
 
         self.maxDepth = 4
         self.maxTrials = 1000
@@ -84,7 +86,7 @@ class Agent:
 
 
     def mcts(self, gameState):
-        root = mctsnode.Node(gameState, self.color, None, None)
+        root = mctsnode.Node(deepcopy(gameState), self.color, None, None)
         root.expand_node()
 
         trials = 0
@@ -101,7 +103,7 @@ class Agent:
             # Backpropagation
             while pick.parent is not None:
                 pick.trials += 1
-                if winner == pick.color:
+                if winner != pick.color:
                     pick.wins += 1
                 pick = pick.parent
             trials += 1
@@ -109,6 +111,7 @@ class Agent:
         bestWinPercentage, bestMove = 0, 0
         for child in root.children:
             winpercent = child.wins / child.trials if child.trials != 0 else 0
+            print(child.wins, child.trials)
             if winpercent > bestWinPercentage:
                 bestMove, bestWinPercentage = child.move, winpercent
         return bestMove

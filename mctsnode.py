@@ -12,6 +12,10 @@ class Node:
         self.trials = 0
 
     def expand_node(self):
+        if self.move != None:
+            if self.gameState.findWinner(self.move) != "none":
+                return
+
         color = "black"
         if self.color == "black":
             color = "white"
@@ -20,14 +24,14 @@ class Node:
         for i in self.gameState.legalMoves:
             state = deepcopy(self.gameState)
             state.processMove(i, self.color)
-            nc = Node(self.gameState, color, self, i)
+            nc = Node(state, color, self, i)
             self.children.append(nc)
 
 
     def simulate(self):
         state = deepcopy(self.gameState)
-        winner = "none"
-        color = self.color
+        winner = state.findWinner(self.move)
+        color = "white" if self.color == "black" else "black"
         while winner == "none":
             pick = random.choice(state.legalMoves)
             state.processMove(pick, color)
