@@ -1,6 +1,7 @@
 import game as gm
 import random
 import math
+import mctsnode
 from copy import deepcopy
 
 class Agent:
@@ -10,13 +11,14 @@ class Agent:
 
         self.decisionFunction = None
         if self.type == "random":
-            self.decisionFunction = self.random
+            self.decisionFunction = self.mcts
         elif self.type == "negamax":
             self.decisionFunction = self.minimax
         elif self.type == "human":
             self.decisionFunction = self.human
 
         self.maxDepth = 4
+        self.maxTrials = 1000
 
     def random(self, gameState):
         # Pick random move
@@ -78,3 +80,35 @@ class Agent:
                 score += len(i.circuitNeighbors[color])
             return score
         return -math.inf
+
+
+
+    def mcts(self, gameState):
+        root = mctsnode.Node(gameState, self.color, None, None)
+        root.expand_node()
+
+        trials = 0
+        while trials < self.maxTrials:
+            # Selection and Expansion
+            pick = root
+            while len(pick.children) > 0:
+                pick = random.choice(pick.children)
+            pick.expand_node()
+
+            # Simulation
+            winner = pick.simulate()
+
+            # Backpropagation
+            while pick.parent is not None:
+                pick.trials += 1
+                if winner == pick.color:
+                    pick.wins += 1
+                pick = pick.parent
+            trials += 1
+
+        bestWinPercentage, bestMove = 0, 0
+        for child in root.children:
+            winpercent = child.wins / child.trials if child.trials != 0 else 0
+            if winpercent > bestWinPercentage:
+                bestMove, bestWinPercentage = child.move, winpercent
+        return bestMove
