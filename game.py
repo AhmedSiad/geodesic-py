@@ -30,6 +30,8 @@ class Game:
             self.bAgent.maxDepth = bLevel + 1
         elif ptb == "random":
             self.bAgent = agent.Agent("black", "random")
+        elif ptb == "montecarlo":
+            self.bAgent = agent.Agent("black", "montecarlo")
 
         if ptw == "human":
             self.wAgent = agent.Agent("white", "human")
@@ -37,7 +39,9 @@ class Game:
             self.wAgent = agent.Agent("white", "negamax")
             self.wAgent.maxDepth = wLevel + 1
         elif ptw == "random":
-            self.bAgent = agent.Agent("white", "random")
+            self.wAgent = agent.Agent("white", "random")
+        elif ptw == "montecarlo":
+            self.wAgent = agent.Agent("white", "montecarlo")
 
         while True:
             self.network.draw(self.nodes)

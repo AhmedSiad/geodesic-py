@@ -66,7 +66,7 @@ playertype(ptb, ptw)
 if ptb == "AI":
     while True:
         try:
-            bTypeInput = str(input('Please enter the type of AI for black — random or negamax (type \"help\" to learn more): '))
+            bTypeInput = str(input('Please enter the type of AI for black — random, negamax, or montecarlo (type \"help\" to learn more): '))
             if bTypeInput == "random":
                 ptb = "random"
                 print("   Black is controlled by a random AI")
@@ -75,31 +75,39 @@ if ptb == "AI":
                 ptb = "negamax"
                 print("   Black is controlled by a negamax AI")
                 break
+            elif bTypeInput == "montecarlo":
+                ptb = "montecarlo"
+                print("   Black is controlled by a montecarlo tree search AI")
+                break
             elif bTypeInput == "help":
-                print("   The random AI makes its moves randomly. The negamax AI makes its moves based on what it evaluates as the best")
+                print("   The random AI makes its moves randomly. The negamax AI makes its moves based on what it evaluates as the best. The montecarlo AI is a learned tree search that makes its moves based on previous winning moves")
             else:
-                print('   Error: AI type must be \"random\" or \"negamax\"')
+                print('   Error: AI type must be \"random,\" \"negamax,\" or \"montecarlo\"')
         except:
-            print('   Error: AI type must be a string reading \"random\" or \"negamax\"')
+            print('   Error: AI type must be a string reading \"random,\" \"negamax,\" or \"montecarlo\"')
 
 if ptw == "AI":
     while True:
         try:
-            bTypeInput = str(input('Please enter the type of AI for white — random or negamax (type \"help\" to learn more): '))
-            if bTypeInput == "random":
+            wTypeInput = str(input('Please enter the type of AI for white — random, negamax, or montecarlo (type \"help\" to learn more): '))
+            if wTypeInput == "random":
                 ptw = "random"
                 print("   White is controlled by a random AI")
                 break
-            elif bTypeInput == "negamax":
+            elif wTypeInput == "negamax":
                 ptw = "negamax"
                 print("   White is controlled by a negamax AI")
                 break
-            elif bTypeInput == "help":
-                print("   The random AI makes its moves randomly. The negamax AI makes its moves based on what it evaluates as the best")
+            elif wTypeInput == "montecarlo":
+                ptw = "montecarlo"
+                print("   White is controlled by a montecarlo tree search AI")
+                break
+            elif wTypeInput == "help":
+                print("   The random AI makes its moves randomly. The negamax AI makes its moves based on what it evaluates as the best. The montecarlo AI is a learned tree search that makes its moves based on previous winning moves")
             else:
-                print('   Error: AI type must be \"random\" or \"negamax\"')
+                print('   Error: AI type must be \"random,\" \"negamax,\" or \"montecarlo\"')
         except:
-            print('   Error: AI type must be a string reading \"random\" or \"negamax\"')
+            print('   Error: AI type must be a string reading \"random,\" \"negamax,\" or \"montecarlo\"')
 
 
 # level selecting for negamax
