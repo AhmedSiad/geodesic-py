@@ -20,7 +20,7 @@ class Agent:
             self.decisionFunction = self.mcts
 
         self.maxDepth = 4
-        self.maxTrials = 1000
+        self.maxTrials = 400
 
     def random(self, gameState):
         # Pick random move
@@ -94,11 +94,19 @@ class Agent:
             # Selection and Expansion
             pick = root
             while len(pick.children) > 0:
-                pick = random.choice(pick.children)
+                bestScore, bestChild = 0, pick.children[0]
+                for child in pick.children:
+                    res = (child.wins/2 + 1) / (child.trials + 2) # Priority formula
+                    if res > bestScore:
+                        bestScore = res
+                        bestChild = child
+                pick = bestChild
+                #pick = random.choice(pick.children)
             pick.expand_node()
 
             # Simulation
             winner = pick.simulate()
+
 
             # Backpropagation
             while pick.parent is not None:
