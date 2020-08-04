@@ -96,7 +96,9 @@ class Agent:
             while len(pick.children) > 0:
                 bestScore, bestChild = 0, pick.children[0]
                 for child in pick.children:
-                    res = (child.wins/2 + 1) / (child.trials + 2) # Priority formula
+                    res = 0.5
+                    if child.trials != 0:
+                        res = child.wins / child.trials * math.sqrt(1 * math.log(pick.trials) / child.trials)
                     if res > bestScore:
                         bestScore = res
                         bestChild = child
@@ -107,7 +109,6 @@ class Agent:
             # Simulation
             winner = pick.simulate()
 
-
             # Backpropagation
             while pick.parent is not None:
                 pick.trials += 1
@@ -115,6 +116,7 @@ class Agent:
                     pick.wins += 1
                 pick = pick.parent
             trials += 1
+            pick.trials += 1
 
         bestWinPercentage, bestMove = 0, 0
         for child in root.children:

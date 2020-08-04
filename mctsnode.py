@@ -37,4 +37,5 @@ class Node:
             state.processMove(pick, color)
             color = "white" if color == "black" else "black"
             winner = state.findWinner(pick)
+        #del self.gameState  use this linet to potentially save memory
         return winner
