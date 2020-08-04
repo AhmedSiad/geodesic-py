@@ -20,7 +20,7 @@ class Agent:
             self.decisionFunction = self.mcts
 
         self.maxDepth = 4
-        self.maxTrials = 400
+        self.maxTrials = 4000
 
     def random(self, gameState):
         # Pick random move
@@ -98,7 +98,7 @@ class Agent:
                 for child in pick.children:
                     res = 0.5
                     if child.trials != 0:
-                        res = child.wins / child.trials * math.sqrt(1 * math.log(pick.trials) / child.trials)
+                        res = child.wins / child.trials * math.sqrt(4 * math.log(pick.trials) / child.trials)
                     if res > bestScore:
                         bestScore = res
                         bestChild = child
@@ -118,7 +118,7 @@ class Agent:
             trials += 1
             pick.trials += 1
 
-        bestWinPercentage, bestMove = 0, 0
+        bestWinPercentage, bestMove = 0, gameState.legalMoves[0]
         for child in root.children:
             winpercent = child.wins / child.trials if child.trials != 0 else 0
             print(child.wins, child.trials)

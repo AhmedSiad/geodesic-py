@@ -13,18 +13,21 @@ class Node:
 
     def expand_node(self):
         if self.move != None:
+            self.gameState = deepcopy(self.gameState)
             if self.gameState.findWinner(self.move) != "none":
                 return
-
+            self.gameState.processMove(self.move, self.parent.color)
+            if self.gameState.findWinner(self.move) != "none":
+                return
         color = "black"
         if self.color == "black":
             color = "white"
         else:
             color = "black"
         for i in self.gameState.legalMoves:
-            state = deepcopy(self.gameState)
-            state.processMove(i, self.color)
-            nc = Node(state, color, self, i)
+            #state = deepcopy(self.gameState)
+            #state.processMove(i, self.color)
+            nc = Node(self.gameState, color, self, i)
             self.children.append(nc)
 
 
