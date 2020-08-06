@@ -4,6 +4,7 @@ import math
 import game as gm
 import graph
 import time
+import agent
 
 winnerFlag = "none"
 color = "black"
@@ -18,8 +19,9 @@ def graphSize(n):
     return graph.generateNSizedGraph(n)
 
 g = 0
-n = 0
+n = 5
 print('Welcome to Command Line Y!')
+"""
 while True:
     try:
         n = int(input('Please enter the base size of the board: '))
@@ -29,6 +31,7 @@ while True:
             print('   Error: base must be an integer greater than 1')
     except:
         print('   Error: base must be an integer greater than 1')
+"""
 g = graphSize(n)
 
 def updateWinnerLabel():
@@ -39,11 +42,11 @@ def updateWinnerLabel():
 def doAIMove():
     decision = None
     if color == "black":
-        decision = game.bAgent.decisionFunction(game)
+        decision = bAgent.decisionFunction(game)
         game.processMove(decision, "black")
         cnv.create_polygon(grph["polygons"][decision], fill="blue", outline="black", width=4)
     elif color == "white":
-        decision = game.wAgent.decisionFunction(game)
+        decision = wAgent.decisionFunction(game)
         game.processMove(decision, "white")
         cnv.create_polygon(grph["polygons"][decision], fill="red", outline="black", width=4)
     cnv.update()
@@ -71,7 +74,7 @@ def playTwoAIs():
         color = "white" if color == "black" else "black"
 
 def play():
-    global game, oneAIPlaying, color, humanPlaying
+    global game, oneAIPlaying, color, humanPlaying, wAgent, bAgent
     ptb = player1Agent.get().lower()
     ptw = player2Agent.get().lower()
 
@@ -79,29 +82,52 @@ def play():
     if ptw != "human": ptw = ptw[:len(ptw)-5]
 
     game = gm.Game(g)
-    game.setup(ptb, ptw, 0, 0)
+
+    if ptb == "human":
+        bAgent = agent.Agent("black", "human")
+    elif ptb == "negamax":
+        bAgent = agent.Agent("black", "negamax")
+        bAgent.maxDepth = 0 + 1
+    elif ptb == "random":
+        bAgent = agent.Agent("black", "random")
+    elif ptb == "montecarlo":
+        bAgent = agent.Agent("black", "montecarlo")
+    elif ptb == "mcts_openspiel":
+        bAgent = agent.Agent("black", "MCTS_OpenSpiel")
+
+    if ptw == "human":
+        wAgent = agent.Agent("white", "human")
+    elif ptw == "negamax":
+        wAgent = agent.Agent("white", "negamax")
+        wAgent.maxDepth = 0 + 1
+    elif ptw == "random":
+        wAgent = agent.Agent("white", "random")
+    elif ptw == "montecarlo":
+        wAgent = agent.Agent("white", "montecarlo")
+    elif ptw == "mcts_openspiel":
+        wAgent = agent.Agent("white", "MCTS_OpenSpiel")
 
     global startButton, startLabel
     startButton.grid_forget()
     startLabel.grid_forget()
 
-    if game.bAgent.type != "human" and game.wAgent.type != "human":
+    if bAgent.type != "human" and wAgent.type != "human":
         playTwoAIs()
-    elif game.bAgent.type != "human" or game.wAgent.type != "human":
+    elif bAgent.type != "human" or wAgent.type != "human":
         oneAIPlaying = True
         humanPlaying = True
     else:
         humanPlaying = True
 
 
-    if game.bAgent.type != "human" and oneAIPlaying == True:
+    if bAgent.type != "human" and oneAIPlaying == True:
         doAIMove()
         color = "white"
 
 
 # GUI SETUP -------------------------------------------------------------------------------------------------
 
-agentTypes = ["Human", "Random (AI)", "Negamax (AI)", "MonteCarlo (AI)"]
+agentTypes = ["Human", "Random (AI)", "Negamax (AI)", "MonteCarlo (AI)", "MCTS_OpenSpiel (AI)"]
 
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 500
@@ -148,7 +174,7 @@ for poly in grph["polygons"]:
     cnv.create_polygon(poly, fill="white", outline="black", width=4)
 
 def mouseClick(event):
-    global color
+    global color, humanPlaying
     if winnerFlag == "none" and humanPlaying == True:
         shortest = math.inf
         closest = None
@@ -157,9 +183,12 @@ def mouseClick(event):
             if dist < shortest: shortest, closest = dist, grph["centers"].index(center)
         if closest in game.legalMoves:
             doHumanMove(closest)
+            cnv.update()
             color = "white" if color == "black" else "black"
             if oneAIPlaying == True and winnerFlag == "none":
+                humanPlaying = False
                 doAIMove()
+                humanPlaying = True
                 color = "white" if color == "black" else "black"
 
 

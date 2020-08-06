@@ -3,6 +3,7 @@ import random
 import math
 import mctsnode
 from copy import deepcopy
+#from open_spiel.python.examples.mcts_agent import MCTS
 
 class Agent:
     def __init__(self, color, type):
@@ -18,9 +19,22 @@ class Agent:
             self.decisionFunction = self.human
         elif self.type == "montecarlo":
             self.decisionFunction = self.mcts
+        elif self.type == "MCTS_OpenSpiel":
+            #self.mctsAgent = MCTS(rollout_count=1, max_simulations=2000)
+            self.decisionFunction = self.mcts_openspiel
 
         self.maxDepth = 4
         self.maxTrials = 100
+
+    def mcts_openspiel(self, gameState):
+
+        if self.color == "black" and len(gameState.wMoves) > 0:
+            self.mctsAgent.OPPONENTmove(gameState.wMoves[len(gameState.wMoves) - 1])
+        if self.color == "white" and len(gameState.bMoves) > 0:
+            self.mctsAgent.OPPONENTmove(gameState.bMoves[len(gameState.bMoves) - 1])
+
+        action = self.mctsAgent.AGENTmove()
+        return action
 
     def random(self, gameState):
         # Pick random move
@@ -84,11 +98,16 @@ class Agent:
                 bestScore, bestChild = 0, pick.children[0]
                 for child in pick.children:
                     res = 0.5
-                    if child.trials != 0:
+                    if child.trials >= 5:
                         res = child.wins / child.trials * math.sqrt(4 * math.log(pick.trials) / child.trials)
                     if res > bestScore:
                         bestScore = res
                         bestChild = child
+                    elif res == bestScore:
+                        if random.choice([0, 1]) == 1:
+                            bestScore = res
+                            bestChild = child
+
                 pick = bestChild
                 #pick = random.choice(pick.children)
             pick.expand_node()

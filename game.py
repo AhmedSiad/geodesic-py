@@ -16,14 +16,15 @@ class Game:
         self.wMoves = []
         self.legalMoves = [i for i in range(len(self.graph))]
 
-        self.bAgent = None
-        self.wAgent = None
+        #self.bAgent = None
+        #self.wAgent = None
 
         self.listeningForMoves = False
         self.humanDecision = None
 
         self.network = network.Network(self.graph)
 
+    """
     def setup(self, ptb, ptw, bLevel, wLevel):
         if ptb == "human":
             self.bAgent = agent.Agent("black", "human")
@@ -34,7 +35,8 @@ class Game:
             self.bAgent = agent.Agent("black", "random")
         elif ptb == "montecarlo":
             self.bAgent = agent.Agent("black", "montecarlo")
-
+        elif ptb == "mcts_openspiel":
+            self.bAgent = agent.Agent("black", "MCTS_OpenSpiel")
         if ptw == "human":
             self.wAgent = agent.Agent("white", "human")
         elif ptw == "negamax":
@@ -44,8 +46,10 @@ class Game:
             self.wAgent = agent.Agent("white", "random")
         elif ptw == "montecarlo":
             self.wAgent = agent.Agent("white", "montecarlo")
-
+        elif ptw == "mcts_openspiel":
+            self.wAgent = agent.Agent("white", "MCTS_OpenSpiel")
         return
+    """
 
     def processMove(self, location, player):
         newStone = self.nodes[location]
@@ -90,6 +94,3 @@ class Game:
             if node in self.groupings[i]:
                 return i
         return -1
-
-
-
