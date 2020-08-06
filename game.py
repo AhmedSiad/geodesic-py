@@ -3,6 +3,7 @@
 import node
 import network
 import agent
+import time
 
 class Game:
     def __init__(self, graph):
@@ -18,11 +19,12 @@ class Game:
         self.bAgent = None
         self.wAgent = None
 
+        self.listeningForMoves = False
+        self.humanDecision = None
+
         self.network = network.Network(self.graph)
 
-    def run(self, ptb, ptw, bLevel, wLevel):
-        currentMove = "black"
-
+    def setup(self, ptb, ptw, bLevel, wLevel):
         if ptb == "human":
             self.bAgent = agent.Agent("black", "human")
         elif ptb == "negamax":
@@ -43,26 +45,7 @@ class Game:
         elif ptw == "montecarlo":
             self.wAgent = agent.Agent("white", "montecarlo")
 
-        while True:
-            self.network.draw(self.nodes)
-
-            decision = ""
-            if currentMove == "black":
-                decision = self.bAgent.decisionFunction(self)
-                self.processMove(decision, "black")
-            else:
-                decision = self.wAgent.decisionFunction(self)
-                self.processMove(decision, "white")
-
-            winner = self.findWinner(decision)
-            if winner != "none":
-                print("   " + winner.capitalize() + " has won the game!")
-                break
-            currentMove = "white" if currentMove == "black" else "black"
-
-        # Finish Game
-        self.network.draw(self.nodes)
-        input("Press any key to close application")
+        return
 
     def processMove(self, location, player):
         newStone = self.nodes[location]

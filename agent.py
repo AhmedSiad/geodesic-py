@@ -20,7 +20,7 @@ class Agent:
             self.decisionFunction = self.mcts
 
         self.maxDepth = 4
-        self.maxTrials = 4000
+        self.maxTrials = 100
 
     def random(self, gameState):
         # Pick random move
@@ -30,20 +30,7 @@ class Agent:
 
     def human(self, gameState):
         # Controlled by human
-        while True:
-            try:
-                move = int(input('Please enter a ' + self.color + " move: "))
-                if move in gameState.legalMoves:
-                    return move
-                elif move > len(gameState.nodes) or move < 0:
-                    print("   Error: this space does not exist on this board")
-                    continue
-                else:
-                    print("   Error: this space is already taken")
-                    continue
-            except ValueError:
-                print("   Error: please input a positive integer")
-                continue
+        pass
 
     def minimax(self, gameState):
         bestMove = self.negamax(gameState, self.maxDepth, -math.inf, math.inf, self.color, None)
