@@ -10,19 +10,11 @@ class Game:
         self.graph = graph
         self.nodes = [node.Node(i, self.graph) for i in range(len(self.graph))]
 
-        self.groupings = []
-
         self.bMoves = []
         self.wMoves = []
         self.legalMoves = [i for i in range(len(self.graph))]
 
-        #self.bAgent = None
-        #self.wAgent = None
-
-        self.listeningForMoves = False
-        self.humanDecision = None
-
-        self.network = network.Network(self.graph)
+        del self.graph
 
     """
     def setup(self, ptb, ptw, bLevel, wLevel):

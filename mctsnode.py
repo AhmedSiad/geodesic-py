@@ -11,13 +11,17 @@ class Node:
         self.wins = 0
         self.trials = 0
 
+        self.isTerminal = False
+
     def expand_node(self):
         if self.move != None:
             self.gameState = deepcopy(self.gameState)
             if self.gameState.findWinner(self.move) != "none":
+                self.isTerminal = True
                 return
             self.gameState.processMove(self.move, self.parent.color)
             if self.gameState.findWinner(self.move) != "none":
+                self.isTerminal = True
                 return
         color = "black"
         if self.color == "black":
@@ -40,5 +44,6 @@ class Node:
             state.processMove(pick, color)
             color = "white" if color == "black" else "black"
             winner = state.findWinner(pick)
-        #del self.gameState  use this linet to potentially save memory
+        if not self.isTerminal: del self.gameState
         return winner
+

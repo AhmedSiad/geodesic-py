@@ -19,7 +19,7 @@ def graphSize(n):
     return graph.generateNSizedGraph(n)
 
 g = 0
-n = 5
+n = 6
 print('Welcome to Command Line Y!')
 """
 while True:
@@ -87,7 +87,6 @@ def play():
         bAgent = agent.Agent("black", "human")
     elif ptb == "negamax":
         bAgent = agent.Agent("black", "negamax")
-        bAgent.maxDepth = 0 + 1
     elif ptb == "random":
         bAgent = agent.Agent("black", "random")
     elif ptb == "montecarlo":
@@ -99,7 +98,6 @@ def play():
         wAgent = agent.Agent("white", "human")
     elif ptw == "negamax":
         wAgent = agent.Agent("white", "negamax")
-        wAgent.maxDepth = 0 + 1
     elif ptw == "random":
         wAgent = agent.Agent("white", "random")
     elif ptw == "montecarlo":

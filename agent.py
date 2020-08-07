@@ -23,8 +23,11 @@ class Agent:
             #self.mctsAgent = MCTS(rollout_count=1, max_simulations=2000)
             self.decisionFunction = self.mcts_openspiel
 
-        self.maxDepth = 4
-        self.maxTrials = 100
+        self.maxDepth = 3
+        self.maxTrials = 1000
+        self.expC = 1
+
+        self.root = None
 
     def mcts_openspiel(self, gameState):
 
@@ -87,19 +90,28 @@ class Agent:
 
 
     def mcts(self, gameState):
-        root = mctsnode.Node(deepcopy(gameState), self.color, None, None)
-        root.expand_node()
+        if self.root == None:
+            self.root = mctsnode.Node(deepcopy(gameState), self.color, None, None)
+            self.root.expand_node()
+        else:
+            lastMove = None
+            if self.color == "black":
+                lastMove = gameState.wMoves[-1]
+            else:
+                lastMove = gameState.bMoves[-1]
+            ch = list(filter(lambda c: c.move == lastMove, self.root.children))[0]
+            self.root = ch
 
         trials = 0
         while trials < self.maxTrials:
             # Selection and Expansion
-            pick = root
+            pick = self.root
             while len(pick.children) > 0:
                 bestScore, bestChild = 0, pick.children[0]
                 for child in pick.children:
                     res = 0.5
                     if child.trials >= 5:
-                        res = child.wins / child.trials * math.sqrt(4 * math.log(pick.trials) / child.trials)
+                        res = child.wins / child.trials * math.sqrt(self.expC * math.log(pick.trials) / child.trials)
                     if res > bestScore:
                         bestScore = res
                         bestChild = child
@@ -125,9 +137,10 @@ class Agent:
             pick.trials += 1
 
         bestWinPercentage, bestMove = 0, gameState.legalMoves[0]
-        for child in root.children:
+        for child in self.root.children:
             winpercent = child.wins / child.trials if child.trials != 0 else 0
             print(child.wins, child.trials)
             if winpercent > bestWinPercentage:
-                bestMove, bestWinPercentage = child.move, winpercent
+                bestMove, bestWinPercentage, self.root = child.move, winpercent, child
+        self.root.parent = None
         return bestMove
